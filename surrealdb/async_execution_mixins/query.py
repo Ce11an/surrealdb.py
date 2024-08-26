@@ -33,6 +33,9 @@ class AsyncQueryMixin:
 
         :return: None
         """
+        if bind is not None:
+            if not all(isinstance(key, str) for key in bind):
+                raise ValueError("All keys in 'bind' must be strings.")
         try:
             return json.loads(await rust_query_future(self._connection, query, bind))[0]
         except Exception as e:
