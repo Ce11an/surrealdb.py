@@ -26,9 +26,10 @@ pub fn rust_query_future<'a>(
     let processed_bindings = match bindings {
         Some(bindings) => {
             let bindings_str = bindings.to_string();
-            println!("Processed bindings: {}", bindings_str);
             let bindings: Value = serde_json::from_str(&bindings_str)
                 .map_err(|e| PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(e.to_string()))?;
+
+            println!("Processed bindings: {}", bindings);
             Some(bindings)
         }
         None => None,
