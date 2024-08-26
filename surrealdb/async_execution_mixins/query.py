@@ -22,9 +22,7 @@ if TYPE_CHECKING:
 class AsyncQueryMixin:
     """This class is responsible for the interface between python and the Rust SurrealDB library for creating a document."""
 
-    async def query(
-        self: SurrealDB, query: str, bind: Optional[dict[str, Any]] = None
-    ) -> List[dict]:
+    async def query(self: SurrealDB, query: str, bind: Any) -> List[dict]:
         """
         queries the database.
 
@@ -33,9 +31,6 @@ class AsyncQueryMixin:
 
         :return: None
         """
-        if bind is not None:
-            if not all(isinstance(key, str) for key in bind):
-                raise ValueError("All keys in 'bind' must be strings.")
         try:
             return json.loads(await rust_query_future(self._connection, query, bind))[0]
         except Exception as e:
